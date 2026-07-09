@@ -1,0 +1,152 @@
+const translations = {
+    "en": {
+        // Nav
+        "nav_about": "About",
+        "nav_expertise": "Expertise",
+        "nav_work": "Work",
+        "nav_talk": "Let's Talk",
+
+        // Mobile Drawer
+        "drawer_home": "Home",
+        "drawer_certs": "Certificates",
+
+        // Hero
+        "hero_subtitle": "Junior High School (SMP) Web Developer in Indonesia",
+        "hero_desc": "Crafting digital experiences where creativity meets code.",
+        "hero_btn": "Explore My Work",
+        "hero_contact": "Contact Me",
+
+        // About
+        "about_title": "About Me",
+        "about_heading": "I am a Junior High School (SMP) student, I am already dedicated to crafting digital experiences that aren't just functional, but emotionally engaging.",
+        "about_desc": "I am a Junior High School (SMP) student, I am already dedicated to crafting digital experiences that aren't just functional, but emotionally engaging. I blend young, bold, and creative ideas with solid programming logic.",
+        "about_desc2": "I blend young, bold, and creative ideas with solid programming logic. The intersection of technical precision and visual elegance is where I thrive.",
+
+        // Certificates
+        "cert_heading": "Certificates",
+        "cert_title": "Certifications \u00b7 Kaggle",
+
+        // Work
+        "work_title": "Selected Works",
+        "work_desc_1": "Experience 3D Sculpting with your hands. A web-based Augmented Reality engine using MediaPipe and Three.js.",
+        "work_desc_2": "A fully functional vehicle rental platform with real-time availability and dynamic pricing.",
+        "work_desc_3": "An interactive class platform featuring a series of activities and class structure.",
+        "work_desc_4": "This is a modern web-based arcade game inspired by Flappy Bird, wrapped in a futuristic Cyberpunk & Neon aesthetic. ",
+        "work_btn": "Live Preview",
+
+        // Footer
+        "footer_title": "LET'S TALK.",
+        "mobile_footer_title": "LET'S\nCONNECT",
+        "footer_subtitle": "Junior High School (SMP) Web Developer",
+        "footer_socials": "Socials",
+        "footer_contact": "Contact",
+        "footer_copyright": "\u00a9 2026 I Kadek Rafa Waradana. All Rights Reserved."
+    },
+    "id": {
+        // Nav
+        "nav_about": "Tentang",
+        "nav_expertise": "Keahlian",
+        "nav_work": "Proyek",
+        "nav_talk": "Mari Bicara",
+
+        // Mobile Drawer
+        "drawer_home": "Beranda",
+        "drawer_certs": "Sertifikat",
+
+        // Hero
+        "hero_subtitle": "Sekolah Menengah Pertama (SMP) Web Developer di Indonesia",
+        "hero_desc": "Menciptakan pengalaman digital tempat kreativitas bertemu dengan kode.",
+        "hero_btn": "Lihat Proyek Saya",
+        "hero_contact": "Hubungi Saya",
+
+        // About
+        "about_title": "Tentang Saya",
+        "about_heading": "Saya adalah seorang siswa SMP yang sudah berdedikasi untuk menciptakan pengalaman digital yang tidak hanya berfungsi, tetapi juga memikat secara emosional.",
+        "about_desc": "Saya adalah seorang siswa SMP, dan saya sudah berdedikasi untuk menciptakan pengalaman digital yang tidak hanya fungsional, tetapi juga melibatkan emosi.",
+        "about_desc2": "Saya memadukan ide-ide muda, berani, dan kreatif dengan logika pemrograman yang solid. Perpaduan antara ketelitian teknis dan keanggunan visual adalah tempat saya berkembang.",
+
+        // Certificates
+        "cert_heading": "Sertifikat",
+        "cert_title": "Sertifikasi \u00b7 Kaggle",
+
+        // Work
+        "work_title": "Proyek Pilihan",
+        "work_desc_1": "Rasakan pengalaman 3D dengan tangan Anda. Sebuah mesin Augmented Reality berbasis web menggunakan MediaPipe dan Three.js.",
+        "work_desc_2": "Platform penyewaan kendaraan yang berfungsi penuh dengan ketersediaan real-time dan harga dinamis.",
+        "work_desc_3": "Platform kelas interaktif yang menampilkan rangkaian kegiatan dan struktur kelas.",
+        "work_desc_4": "Web ini adalah sebuah game arcade modern berbasis web yang terinspirasi dari game Flappy Bird, namun dibalut dengan estetika Cyberpunk & Neon yang futuristik.",
+        "work_btn": "Lihat Langsung",
+
+        // Footer
+        "footer_title": "AYO BICARA.",
+        "mobile_footer_title": "AYO\nBICARА",
+        "footer_subtitle": "Sekolah Menengah Pertama (SMP) Web Developer",
+        "footer_socials": "Media Sosial",
+        "footer_contact": "Kontak",
+        "footer_copyright": "\u00a9 2026 I Kadek Rafa Waradana. Semua Hak Dilindungi."
+    }
+};
+
+// State
+let currentLang = 'en';
+
+// Detect or Load saved language
+function initLanguage() {
+    const savedLang = localStorage.getItem('user_lang');
+    if (savedLang && (savedLang === 'en' || savedLang === 'id')) {
+        currentLang = savedLang;
+    } else {
+        const browserLang = navigator.language || navigator.userLanguage;
+        currentLang = browserLang.toLowerCase().includes('id') ? 'id' : 'en';
+    }
+    applyLanguage(currentLang);
+}
+
+// Inject fade transition style once
+(function injectFadeStyle() {
+    const style = document.createElement('style');
+    style.textContent = '[data-i18n] { transition: opacity 0.25s ease; }';
+    document.head.appendChild(style);
+})();
+
+function applyLanguage(lang) {
+    const dict = translations[lang];
+    if (!dict) return;
+
+    const elements = document.querySelectorAll('[data-i18n]');
+
+    // Step 1: Fade out
+    elements.forEach(el => { el.style.opacity = '0'; });
+
+    setTimeout(() => {
+        // Step 2: Swap text
+        elements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] !== undefined) {
+                if (el.innerHTML.includes('<br') && dict[key].includes('\n')) {
+                    el.innerHTML = dict[key].replace('\n', '<br/>');
+                } else {
+                    el.textContent = dict[key];
+                }
+            }
+        });
+
+        // Update toggle button labels
+        const btnDesktop = document.getElementById('current-lang-desktop');
+        const btnMobile  = document.getElementById('current-lang-mobile');
+        if (btnDesktop) btnDesktop.textContent = lang.toUpperCase();
+        if (btnMobile)  btnMobile.textContent  = lang.toUpperCase();
+
+        localStorage.setItem('user_lang', lang);
+        currentLang = lang;
+
+        // Step 3: Fade back in
+        elements.forEach(el => { el.style.opacity = '1'; });
+    }, 250); // matches transition duration
+}
+
+function toggleLanguage() {
+    applyLanguage(currentLang === 'en' ? 'id' : 'en');
+}
+
+document.addEventListener('DOMContentLoaded', initLanguage);
