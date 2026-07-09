@@ -1,39 +1,39 @@
-window.addEventListener('load',()=>{let progress=0;const counter=document.querySelector('.counter');const bar=document.querySelector('.fill');const loader=document.querySelector('.preloader');const interval=setInterval(()=>{progress+=Math.floor(Math.random()*10)+5;if(progress>100)progress=100;counter.textContent=progress+'%';bar.style.width=progress+'%';if(progress===100){clearInterval(interval);setTimeout(()=>{loader.classList.add('fade-out');document.body.classList.remove('loading');initHeroAnimations()},500)}},50)});document.querySelectorAll('.marquee-row').forEach(row=>{const track=row.querySelector('.marquee-track');const content=track.innerHTML;track.innerHTML=content+content+content;const direction=row.getAttribute('data-direction');let position=0;const speed=direction==='left'?-1:1;let isHovered=!1;row.addEventListener('mouseenter',()=>isHovered=!0);row.addEventListener('mouseleave',()=>isHovered=!1);setTimeout(()=>{const thirdWidth=track.scrollWidth/3;if(direction==='right')position=-thirdWidth;const step=()=>{if(!isHovered){position+=speed;if(direction==='left'&&Math.abs(position)>=thirdWidth){position=0}else if(direction==='right'&&position>=0){position=-thirdWidth}
-track.style.transform=`translateX(${position}px)`}
-requestAnimationFrame(step)};requestAnimationFrame(step)},100)});const magneticElements=document.querySelectorAll('.magnetic');magneticElements.forEach(elem=>{elem.addEventListener('mousemove',(e)=>{const rect=elem.getBoundingClientRect();const strength=elem.dataset.strength||20;const x=(e.clientX-rect.left-rect.width/2)*(strength/100);const y=(e.clientY-rect.top-rect.height/2)*(strength/100);elem.style.transform=`translate(${x}px, ${y}px) scale(1.15)`});elem.addEventListener('mouseleave',()=>{elem.style.transform=`translate(0px, 0px) scale(1)`})});const tiltBox=document.querySelector('.tilt-box');const portraitImg=document.querySelector('.portrait-img');if(tiltBox&&portraitImg){tiltBox.addEventListener('mousemove',(e)=>{const rect=tiltBox.getBoundingClientRect();const x=e.clientX-rect.left;const y=e.clientY-rect.top;const centerX=rect.width/2;const centerY=rect.height/2;const tiltX=(y-centerY)/20;const tiltY=(centerX-x)/20;tiltBox.style.transform=`perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;portraitImg.style.transform=`scale(1.1) translate(${tiltY * 0.5}px, ${-tiltX * 0.5}px)`});tiltBox.addEventListener('mouseleave',()=>{tiltBox.style.transform=`perspective(1000px) rotateX(0deg) rotateY(0deg)`;portraitImg.style.transform=`scale(1.05) translate(0px, 0px)`})}
-window.addEventListener('scroll',()=>{const scrollY=window.scrollY;const coverImgs=document.querySelectorAll('.cover-img');coverImgs.forEach(img=>{const parent=img.parentElement;const parentTop=parent.getBoundingClientRect().top;const speed=0.15;if(parentTop<window.innerHeight&&parentTop>-parent.offsetHeight){const yPos=(parentTop-window.innerHeight/2)*speed;img.style.transform=`translateY(${yPos}px)`}});const shrinkTexts=document.querySelectorAll('.scroll-shrink');shrinkTexts.forEach((text,i)=>{const rect=text.getBoundingClientRect();if(rect.top<window.innerHeight&&rect.bottom>0){const move=(window.innerHeight-rect.top)*0.1*(i%2===0?1:-1);text.style.transform=`translate(calc(-50% + ${move}px), -50%)`}})});const fadeUpElements=document.querySelectorAll('.animate-fade-up');const observerOptions={root:null,rootMargin:'0px',threshold:0.15};const styleSheet=document.createElement("style");styleSheet.innerText=`
-    .animate-fade-up {
-        opacity: 0;
-        transform: translateY(40px);
-        transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1), transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-    .animate-fade-up.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-`;document.head.appendChild(styleSheet);const fadeUpObserver=new IntersectionObserver((entries,observer)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},observerOptions);fadeUpElements.forEach(el=>fadeUpObserver.observe(el));function initHeroAnimations(){const reveals=document.querySelectorAll('.reveal-text');const visual=document.querySelector('.reveal-visual');const revealStyle=document.createElement("style");revealStyle.innerText=`
-        .reveal-text {
-            opacity: 0;
-            transform: translateY(30px) rotate(2deg);
-            transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .reveal-text.delay-1 { transition-delay: 0.1s; }
-        .reveal-text.delay-2 { transition-delay: 0.2s; }
-        .reveal-text.active {
-            opacity: 1;
-            transform: translateY(0) rotate(0);
-        }
-        .reveal-visual {
-            opacity: 0;
-            transform: scale(0.9) translateY(40px);
-            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1) 0.3s, transform 1.5s cubic-bezier(0.19, 1, 0.22, 1) 0.3s;
-        }
-        .reveal-visual.active {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-    `;document.head.appendChild(revealStyle);setTimeout(()=>{reveals.forEach(r=>r.classList.add('active'));if(visual)visual.classList.add('active');},100)}
-const translations={en:{navHome:"Home",navAbout:"About",navWork:"Project",navContact:"Contact",heroSubtitle:"Junior High School (SMP) Web Developer in Indonesia",heroBtn:"Explore The Project",aboutLead:"I am a <span class='highlight-text'>Junior High School (SMP) student</span>, I am already dedicated to crafting digital experiences that aren't just functional, but emotionally engaging. I blend young, bold, and creative ideas with solid programming logic.",workHeader:"Projects",certHeader:"Certificates",p1Desc:"Experience 3D Sculpting with your hands. A web-based Augmented Reality engine using MediaPipe and Three.js.",pLink:"Live Preview &nearr;",p2Desc:"Website for motorbike and car rental with a modern and attractive design.",p3Desc:"Official Class Website featuring structure & archives for easy access.",p4Desc:"This is a modern web-based arcade game inspired by Flappy Bird, wrapped in a futuristic Cyberpunk & Neon aesthetic. The game is developed using HTML5 Canvas, Vanilla CSS, and Pure JavaScript to ensure extremely lightweight and smooth performance.",footerCta:"HAVE AN IDEA?",footerTalk:"LET'S TALK.",footerRights:"&copy; 2026 I Kadek Rafa Waradana. All Rights Reserved."},id:{navHome:"Beranda",navAbout:"Tentang",navWork:"Karya",navContact:"Kontak",heroSubtitle:"Developer Web & Siswa SMP di Indonesia",heroBtn:"Jelajahi Proyek",aboutLead:"Sebagai seorang <span class='highlight-text'>pelajar SMP</span>, saya telah berdedikasi menciptakan pengalaman digital yang tidak hanya fungsional, tapi juga menggugah secara emosional. Memadukan ide muda, berani, & kreatif dengan logika pemrograman yang solid.",workHeader:"Karya Pilihan",certHeader:"Sertifikat",p1Desc:"Rasakan pengalaman memahat 3D dengan tangan kosong. Mesin Augmented Reality berbasis web menggunakan MediaPipe & Three.js.",pLink:"Cek Webnya &nearr;",p2Desc:"Website penyewaan motor dan mobil dengan desain yang modern dan atraktif.",p3Desc:"Website Kelas Resmi dengan fitur struktur kelas & arsip yang mudah diakses.",p4Desc:"Web ini adalah sebuah game arcade modern berbasis web yang terinspirasi dari game Flappy Bird, namun dibalut dengan estetika Cyberpunk & Neon yang futuristik. Game ini dikembangkan menggunakan teknologi HTML5 Canvas, Vanilla CSS, dan Pure JavaScript untuk memastikan performa yang sangat ringan dan mulus",footerCta:"PUNYA IDE KEREN?",footerTalk:"MARI NGOBROL.",footerRights:"&copy; 2026 I Kadek Rafa Waradana. Hak Cipta Dilindungi."}};let currentLang='en';const btnEn=document.getElementById('lang-en');const btnId=document.getElementById('lang-id');function setLanguage(lang){if(!translations[lang]||currentLang===lang)return;currentLang=lang;const elements=document.querySelectorAll('[data-i18n]');elements.forEach(el=>{el.style.transition='opacity 0.3s ease';el.style.opacity='0'});setTimeout(()=>{elements.forEach(el=>{const key=el.getAttribute('data-i18n');if(translations[lang][key]){el.innerHTML=translations[lang][key];if(el.hasAttribute('data-text')){el.setAttribute('data-text',translations[lang][key])}}
-el.style.opacity='1'});setTimeout(()=>{elements.forEach(el=>{el.style.transition='';el.style.opacity=''})},300)},300);if(lang==='en'){btnEn.classList.add('active');btnId.classList.remove('active')}else{btnId.classList.add('active');btnEn.classList.remove('active')}}
-if(btnEn&&btnId){btnEn.addEventListener('click',()=>setLanguage('en'));btnId.addEventListener('click',()=>setLanguage('id'))}
-if(window.matchMedia("(pointer: fine)").matches){const cursorDot=document.createElement('div');cursorDot.className='cursor-dot';const cursorOutline=document.createElement('div');cursorOutline.className='cursor-outline';document.body.appendChild(cursorDot);document.body.appendChild(cursorOutline);window.addEventListener('mousemove',(e)=>{cursorDot.style.left=e.clientX+'px';cursorDot.style.top=e.clientY+'px';cursorOutline.animate({left:e.clientX+'px',top:e.clientY+'px'},{duration:150,fill:"forwards"})});document.querySelectorAll('a, button, .magnetic').forEach(el=>{el.addEventListener('mouseenter',()=>cursorOutline.classList.add('hovering'));el.addEventListener('mouseleave',()=>cursorOutline.classList.remove('hovering'))})}
+(function(){const canvas=document.getElementById('shader-canvas-ANIMATION_2');function syncSize(){const w=canvas.clientWidth||1280;const h=canvas.clientHeight||720;if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}}
+if(typeof ResizeObserver!=='undefined'){new ResizeObserver(syncSize).observe(canvas)}
+syncSize();const gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');if(!gl)return;const vs=`attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;const fs=`precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    float t = u_time * 0.3;
+    vec3 color1 = vec3(0.02, 0.05, 0.15); // Deep Navy
+    vec3 color2 = vec3(0.3, 0.1, 0.5);   // Purple
+    vec3 color3 = vec3(0.0, 0.4, 0.8);   // Blue
+    vec3 color4 = vec3(0.6, 0.0, 0.2);   // Crimson
+    
+    float n1 = sin(uv.x * 3.0 + t) * cos(uv.y * 2.0 - t * 0.5);
+    float n2 = sin(uv.y * 4.0 - t * 0.8) * cos(uv.x * 5.0 + t * 0.3);
+    float n3 = sin((uv.x + uv.y) * 2.0 + t);
+    
+    vec3 color = color1;
+    color = mix(color, color2, smoothstep(0.1, 0.8, n1 * 0.5 + 0.5) * 0.3);
+    color = mix(color, color3, smoothstep(0.2, 0.9, n2 * 0.5 + 0.5) * 0.2);
+    color = mix(color, color4, smoothstep(0.3, 1.0, n3 * 0.5 + 0.5) * 0.15);
+    
+    float dist = distance(uv, vec2(0.5));
+    color *= 1.2 - dist;
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;function cs(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s}
+const prog=gl.createProgram();gl.attachShader(prog,cs(gl.VERTEX_SHADER,vs));gl.attachShader(prog,cs(gl.FRAGMENT_SHADER,fs));gl.linkProgram(prog);gl.useProgram(prog);const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);const pos=gl.getAttribLocation(prog,'a_position');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,!1,0,0);const uTime=gl.getUniformLocation(prog,'u_time');const uRes=gl.getUniformLocation(prog,'u_resolution');const uMouse=gl.getUniformLocation(prog,'u_mouse');let mouse={x:canvas.width/2,y:canvas.height/2};window.addEventListener('mousemove',(event)=>{const rect=canvas.getBoundingClientRect();if(rect.width&&rect.height){const nx=(event.clientX-rect.left)/rect.width;const ny=1.0-(event.clientY-rect.top)/rect.height;mouse.x=nx*canvas.width;mouse.y=ny*canvas.height}});function render(t){if(typeof ResizeObserver==='undefined')syncSize();gl.viewport(0,0,canvas.width,canvas.height);if(uTime)gl.uniform1f(uTime,t*0.001);if(uRes)gl.uniform2f(uRes,canvas.width,canvas.height);if(uMouse)gl.uniform2f(uMouse,mouse.x,mouse.y);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(render)}
+render(0)})();const observerOptions={root:null,rootMargin:'0px',threshold:0.1};const observer=new IntersectionObserver((entries,observer)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},observerOptions);document.querySelectorAll('.reveal-on-scroll').forEach((el)=>{observer.observe(el)});const nav=document.querySelector('nav');window.addEventListener('scroll',()=>{if(window.scrollY>50){nav.classList.add('bg-[#050505]/80');nav.classList.remove('bg-transparent')}else{nav.classList.remove('bg-[#050505]/80');nav.classList.add('bg-transparent')}});const cards=document.querySelectorAll('.stacked-card');window.addEventListener('scroll',()=>{cards.forEach((card,index)=>{const rect=card.getBoundingClientRect();const maxScroll=window.innerHeight*0.8;const progress=Math.max(0,Math.min(1,(100-rect.top)/maxScroll));if(rect.top<=100){const scale=1-(progress*0.05);card.style.transform=`scale(${scale})`;card.style.filter=`brightness(${1 - (progress * 0.5)})`}else{card.style.transform=`scale(1)`;card.style.filter=`brightness(1)`}})});const hamburgerBtn=document.getElementById('hamburger-btn');const mobileDrawer=document.getElementById('mobile-drawer');const hbLine1=document.getElementById('hb-line1');const hbLine2=document.getElementById('hb-line2');const hbLine3=document.getElementById('hb-line3');let menuOpen=!1;function openMenu(){menuOpen=!0;mobileDrawer.style.display='flex';document.body.style.overflow='hidden';hbLine1.style.transform='translateY(7px) rotate(45deg)';hbLine2.style.opacity='0';hbLine3.style.transform='translateY(-7px) rotate(-45deg)'}
+function closeMenu(){menuOpen=!1;mobileDrawer.style.display='none';document.body.style.overflow='';hbLine1.style.transform='';hbLine2.style.opacity='1';hbLine3.style.transform=''}
+if(hamburgerBtn){hamburgerBtn.addEventListener('click',()=>{if(menuOpen)closeMenu();else openMenu()})}
+document.querySelectorAll('.mobile-nav-link').forEach(link=>{link.addEventListener('click',closeMenu)})
